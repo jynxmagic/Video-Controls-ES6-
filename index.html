@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>MMU Video</title>
+        
+        <!---- HTML5 DEFER TAG USED INSTEAD OF WAITING FOR DOM CONTENT TO LOAD INSIDE JS FILE (probably quicker to let browsers handle this rather than js?) --->
+        <script defer src="scripts/functions.js"></script>
+        <script defer src="scripts/main.js"></script>
+		<script defer src="scripts/pause_video_tab_change.js"></script>
+		
+    </head>
+    
+    <body>
+        <section class="container">
+            <header>
+                <h1>Chris Carr, 17105584, 22/11/2018</h1>
+            </header>
+
+            <section id="videoContainer">
+                <video width="640px" height="360px" poster="img/poster.jpg"> <!-- setting width and height here is not responsive. different image should be downloaded dependant on responsive width/height to save bandwidth -->
+                    <source src="video/mp4/mmu.mp4" type="video/mp4">
+                    <source src="video/webM/MMU.webm" type="video/mp4">
+                    <p>Your browser doesn't support HTML5 video. You can download the video file <a href="video/mp4/mmu.mp4">here</a> instead.</p>
+                </video>
+                
+                <div id="videoControls">
+                    <button type="button" id="playPause">Play &#x25BA;</button>
+                    <button type="button" id="muteVideo">Mute &#x1f507;</button>
+					<input type="text" readonly id="currentTimeField" size="4" >
+					<input type="text" readonly id="durationField" size="4" >
+					Playback Speed: <select id="playbackSpeedField">
+						<option value="0.75" id="lowspeed">0.75x</option>
+                        <!-- default selected option -->
+						<option value="1.00" selected id="defaultspeed">1.00x</option>
+						<option value="1.25" id="125speed">1.25x</option>
+						<option value="1.50" id="150speed">1.50x</option>
+						<option value="1.75" id="175speed">1.75x</option>
+						<option value="2.00" id="200speed">2.00x</option>
+					</select>
+                    <br>
+					<button type="button" id="rewindButton"> &#9194; Rewind</button>
+					Position: <input type="range" id="seekBar" min=0 max=100 step=1 value=0>
+                    Volume: <input type="range" id="volumeBar" min=0 max=100 step=1 value=100>
+					<button type="button" id="forwardButton"> &#9193; Forward</button>
+                </div>
+                
+            </section>
+            
+         </section>
+        
+    </body>
+    
+</html>
