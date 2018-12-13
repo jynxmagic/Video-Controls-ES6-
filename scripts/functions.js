@@ -1,5 +1,4 @@
-'use strict';
-//functions
+//################# FUNCTIONS ##############
 
 
 //TOGGLE PLAY FUNTION
@@ -8,12 +7,10 @@ let toggle_play = () =>
     if(video_player.paused)
     {
         video_player.play()
-        play_button.innerHTML = "Pause &#10074;";
     }
     else
     {
         video_player.pause();
-        play_button.innerHTML = "Play &#x25BA;";
     }
 }; //semi colons after functions ensure minification works properly https://stackoverflow.com/questions/1834642/why-should-i-use-a-semicolon-after-every-function-in-javascript
 
@@ -25,12 +22,12 @@ let toggle_mute = () =>
     if(video_player.muted)
     {
         //muted - apply last vlume and set unmute
-        video_player.volume = volume;
+        video_player.volume = 0.5;
         video_player.muted = false;
         mute_button.innerHTML = "Mute &#x1f507;";
     }
     else
-    {     
+    {
         //Not muted - mute
         video_player.volume = 0.00;
         video_player.muted = true;
@@ -39,6 +36,7 @@ let toggle_mute = () =>
     
     //update volume slider value to represent the mute
     volume_slider.value = video_player.volume * 100;
+    document.getElementById("volumeValue").innerHTML = volume_slider.value;
 };
 
 //VIDEO SLIDER FUNCTIONS
@@ -53,7 +51,8 @@ let scrub_video = () =>
 //auto upate video function
 let update_play_slider_position = () =>
 {
-    scrub_slider.value = (video_player.currentTime / video_player.duration) * 100;
+	if(!isNaN((video_player.currentTime / video_player.duration) * 100))
+    	scrub_slider.value = (video_player.currentTime / video_player.duration) * 100;
 };
 
 
@@ -62,6 +61,8 @@ let update_volume = () =>
 {
     //ensure that volume can carry across to mute functions
     volume = video_player.volume;
+    
+    document.getElementById("volumeValue").innerHTML = volume_slider.value;
     
     
     //set volume
@@ -148,16 +149,20 @@ let jump_forward = () =>
 };
 
 //GO TO START FUNCTION
-let jump_start = () =>
+let jump_start = (event) =>
 {
 	video_player.currentTime = 0;
 	video_player.pause();
+	
+	video_player.load();
+	
+	scrub_slider.value = 0;
 	
 	play_button.innerHTML = "Play &#x25BA;";
 };
 
 //RESOLVE WHICH KEY WAS PRESSED AND DO RELEVANT ACTION FUNCTION
-let handle_key_action = (event) =>
+let handle_key_action = () =>
 {
     switch(event.keyCode)
     {
@@ -204,4 +209,13 @@ let handle_key_action = (event) =>
     }
     
     //key down event used instead of key pressed, so you can hold the buttons to zoom the sliders (only really helpful with volume).    
+};
+
+let change_pause_state = () =>
+{
+    play_button.innerHTML = "Play &#x25BA;";
+};
+let change_play_state = () =>
+{
+    play_button.innerHTML = "Pause &#10074;";
 };

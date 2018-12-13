@@ -5,7 +5,6 @@
         <title>MMU Video</title>
         
         <!---- HTML5 DEFER TAG USED INSTEAD OF WAITING FOR DOM CONTENT TO LOAD INSIDE JS FILE (probably quicker to let browsers handle this rather than js?) --->
-        <script defer src="scripts/functions.js"></script>
         <script defer src="scripts/main.js"></script>
 		<script defer src="scripts/pause_video_tab_change.js"></script>
 		
@@ -41,7 +40,8 @@
                     <br>
 					<button type="button" id="rewindButton"> &#9194; Rewind</button>
 					Position: <input type="range" id="seekBar" min=0 max=100 step=1 value=0>
-                    Volume: <input type="range" id="volumeBar" min=0 max=100 step=1 value=100>
+                    Volume: <input type="range" id="volumeBar" min=0 max=100 step=1 value=50>
+                    <span id="volumeValue">50</span>
 					<button type="button" id="forwardButton"> &#9193; Forward</button>
                 </div>
                 
