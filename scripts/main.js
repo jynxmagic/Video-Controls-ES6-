@@ -80,18 +80,24 @@ let update_volume = () =>
 };
 
 //DISPLAY DURATION FUNCTION
-let display_duration = () =>
+var display_duration = () =>
 {
-	let current_time = video_player.currentTime;
-	let video_duration = video_player.duration - current_time;
-	let seconds = Math.floor(video_duration % 60);
-	
-	//cheating way to do if statements - only ever use for a one liner. dont use the ? method unless u got a boolean
-	if(seconds < 10) 
-		seconds = "0" + seconds;
-	
-	duration_display.value = Math.floor(video_duration / 60)  + ":" + seconds;
-	
+    if(isNaN(video_player.duration))
+    {
+        duration_display.value = "Unable to load video duration - please refresh";
+    }
+    else
+    {
+        let current_time = video_player.currentTime;
+        let video_duration = video_player.duration - current_time;
+        let seconds = Math.floor(video_duration % 60);
+
+        //cheating way to do if statements - only ever use for a one liner. dont use the ? method unless u got a boolean
+        if(seconds < 10) 
+            seconds = "0" + seconds;
+
+        duration_display.value = Math.floor(video_duration / 60)  + ":" + seconds;
+    }
 };
 
 //DISPLAY CURRENT TIME FUNCTION
@@ -128,10 +134,7 @@ let display_current_time = () =>
 //UPDATE PLAYBACK SPEED FUNCTION
 let update_playback_speed = () =>
 {
-	let selected_value = playback_speed_select[playback_speed_select.selectedIndex].value;
-	
-	video_player.playbackRate = selected_value;
-	
+	video_player.playbackRate = playback_speed_select.value;
 };
 
 //JUMP BACK FUNCTION
@@ -164,12 +167,14 @@ let jump_start = (event) =>
 	video_player.load();
 	
 	scrub_slider.value = 0;
+    
+    current_time_display.value = "0.00";
 	
 	play_button.innerHTML = "Play &#x25BA;";
 };
 
 //RESOLVE WHICH KEY WAS PRESSED AND DO RELEVANT ACTION FUNCTION
-let handle_key_action = () =>
+let handle_key_action = (event) =>
 {
     switch(event.keyCode)
     {
@@ -183,6 +188,7 @@ let handle_key_action = () =>
             
             video_player.volume = volume;
             volume_slider.value = volume*100;
+            document.getElementById("volumeValue").innerHTML = volume_slider.value;
             break;
         case 40:
             //DOWN key pressed
@@ -193,6 +199,7 @@ let handle_key_action = () =>
             
             video_player.volume = volume;
             volume_slider.value = volume*100;
+            document.getElementById("volumeValue").innerHTML = volume_slider.value;
             break;
         case 37:
             //LEFT key pressed
@@ -258,10 +265,7 @@ mute_button.addEventListener("click", toggle_mute);
 scrub_slider.addEventListener ("input", scrub_video);
 video_player.addEventListener ( "timeupdate", update_play_slider_position );
 volume_slider.addEventListener("input", update_volume);
-video_player.addEventListener("timeupdate", display_duration);
 video_player.addEventListener("timeupdate", display_current_time);
-//fix for applying video duration before video is played
-video_player.addEventListener("loadedmetadata", display_duration);
 
 playback_speed_select.addEventListener("change", update_playback_speed);
 rewind_button.addEventListener("click", jump_back);
@@ -272,3 +276,11 @@ forward_button.addEventListener("click", jump_forward);
 //video play/pause dynamically responds to state rather than hardcoded
 video_player.addEventListener("play", change_play_state);
 video_player.addEventListener("pause", change_pause_state);
+
+
+//event listener for display duration is seperate due to value retrieve issues in chrome (video player is forced to reload after event listener is applied)
+document.addEventListener("DOMContentLoaded", function(){
+    video_player.addEventListener("loadedmetadata", display_duration);
+    
+    video_player.load();
+});
